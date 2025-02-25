@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Views\Resources\app-logo128.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Resources\app-logo128.ico" />
+    <None Remove="Views\Resources\append24-black.png" />
+    <None Remove="Views\Resources\chat64.png" />
+    <None Remove="Views\Resources\edit24-black.png" />
+    <None Remove="Views\Resources\edit32-black.png" />
+    <None Remove="Views\Resources\home24-black.png" />
+    <None Remove="Views\Resources\setting64.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Resources\append24-black.png" />
+    <Resource Include="Views\Resources\edit24-black.png" />
+    <Resource Include="Views\Resources\edit32-black.png" />
+    <Resource Include="Views\Resources\home24-black.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
+    <PackageReference Include="Markdig" Version="0.40.0" />
+    <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
+    <PackageReference Include="Markdown.ColorCode" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="OllamaSharp" Version="5.0.7" />
+    <PackageReference Include="WebStoating.Markdig.Prism" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Resources\app-logo128.ico" />
+    <Resource Include="Views\Resources\chat64.png" />
+    <Resource Include="Views\Resources\setting64.png" />
+  </ItemGroup>
+
+</Project>

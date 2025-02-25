@@ -1,0 +1,164 @@
+﻿<Window x:Class="OfflineAI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:OfflineAI"
+        xmlns:viewmodels="clr-namespace:OfflineAI.ViewModels" 
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="ChatAI" Height="800" Width="1000"
+        Icon="/Views/Resources/app-logo128.ico"
+        MinHeight="600" MinWidth="800">
+    <!--绑定上下文-->
+    <Window.DataContext>
+        <viewmodels:MainViewModel>
+        </viewmodels:MainViewModel>
+    </Window.DataContext>
+
+    <!--样式资源-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <!--资源字典: 添加控件样式-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/Styles/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="Views/Styles/ComboBoxStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!--事件命令绑定-->
+    <behavior:Interaction.Triggers>
+        <!--窗体加载命令绑定-->
+        <behavior:EventTrigger EventName="Loaded">
+            <behavior:InvokeCommandAction Command="{Binding LoadedWindowCommand}" 
+                                          PassEventArgsToCommand="True"/>
+        </behavior:EventTrigger>
+        <!--窗体关闭命令绑定-->
+        <behavior:EventTrigger EventName="Closing">
+            <behavior:InvokeCommandAction Command="{Binding ClosingWindowCommand}" 
+                                       PassEventArgsToCommand="True"/>
+        </behavior:EventTrigger>
+    </behavior:Interaction.Triggers>
+    <Grid>
+        <!-- 定义3列：-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <!-- 定义2行 -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <!-- 折叠栏 Expander -->
+        <Expander x:Name="expanderBox" Grid.Row="0" Grid.Column="0"  Header="" 
+                  Background="#AABBBB" ExpandDirection="Left"
+                  IsExpanded="False"
+                  FlowDirection="LeftToRight" Width="{Binding ExpandedBarWidth}">
+            <!--命令绑定事件-->
+            <behavior:Interaction.Triggers>
+                <!--折叠栏展开命令绑定-->
+                <behavior:EventTrigger EventName="Expanded">
+                    <behavior:InvokeCommandAction Command="{Binding ExpandedMenuCommand}" />
+                </behavior:EventTrigger>
+                <!--折叠栏折叠命令绑定-->
+                <behavior:EventTrigger EventName="Collapsed">
+                    <behavior:InvokeCommandAction Command="{Binding CollapsedMenuCommand}" />
+                </behavior:EventTrigger>
+            </behavior:Interaction.Triggers>
+            
+            <ScrollViewer Background="#AEAEAE" x:Name="RecordScrollViewer">
+                <ListBox ItemsSource="{Binding ChatRecordCollection}" Margin="5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- 显示消息内容 -->
+                            <TextBlock Text="{Binding Data}"  Margin="10,0,0,0">
+                                <behavior:Interaction.Triggers>
+                                    <!--鼠标点击命令事件-->
+                                    <behavior:EventTrigger EventName="PreviewMouseDown">
+                                        <behavior:InvokeCommandAction
+                                         Command="{Binding DataContext.ChatRecordMouseDownCommand, 
+                                            RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                         CommandParameter="{Binding}"
+                                         PassEventArgsToCommand="True"/>
+                                    </behavior:EventTrigger>
+                                </behavior:Interaction.Triggers>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Expander>
+
+        <!-- 右侧内容区域 -->
+        <Border Background="LightGray" Grid.Row="0" Grid.Column="1" Padding="10"/>
+
+        <!--主要区域-->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="3">
+            <!--定义三行-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="350"/>
+            </Grid.RowDefinitions>
+            <!--设置背景色-->
+            <Border Grid.Row="0" Background="#99BBCC"/>
+            <Border Grid.Row="1" Background="#FFFFFF" Grid.RowSpan="2"/>
+            <!--第一行内容：左对齐内容-->
+            <WrapPanel VerticalAlignment="Center">
+                <!--视图切换：首页-->
+                <Button x:Name="Btn_HomePage" Width="50" Height="36" FontSize="16"
+                   Style="{StaticResource IconButtonStyle}" 
+                   Command="{Binding SwitchViewCommand}"
+                   CommandParameter="UserChatView">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Views/Resources/home24-black.png"
+                             Margin="5" Width="24" Height="24"
+                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <!--视图切换：新聊天界面-->
+                <Button x:Name="Btn_Chat" Width="100" Height="36" FontSize="16"
+                  Style="{StaticResource IconButtonStyle}" 
+                  Command="{Binding SwitchViewCommand}"
+                  CommandParameter="NewUserChatView">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Views/Resources/edit24-black.png"
+                                Margin="5" Width="24" Height="24"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="新聊天" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <!--模型列表-->
+                <Label Content="模型:" Margin="5" FontSize="18" VerticalAlignment="Center"/>
+                <ComboBox x:Name="Cbx_ModelList" 
+                          Style="{StaticResource RoundComboBoxStyle}" 
+                          ItemsSource="{Binding ModelListCollection}"
+                          SelectedItem="{Binding SelectedModel}">
+                </ComboBox>
+            </WrapPanel>
+            <!--第一行内容：右对齐内容-->
+            <WrapPanel Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                <Button Background="#99BBCC" 
+                        Command="{Binding SwitchViewCommand}"
+                        CommandParameter="SystemSettingView">
+                    <Image Source="/Views/Resources/setting64.png" 
+                        Margin="5"  Width="24" Height="24"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Button>
+            </WrapPanel>
+
+            <!--第二行内容：显示当前视图-->
+            <ContentControl Grid.Row="1" Margin="5,5,5,5"
+                 Content="{Binding CurrentView}" 
+                 HorizontalContentAlignment="Stretch" 
+                 VerticalContentAlignment="Stretch" Grid.RowSpan="2"/>
+        </Grid>
+
+    </Grid>
+</Window>
