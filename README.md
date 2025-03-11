@@ -8,7 +8,11 @@
 > Microsoft.Xaml.Behaviors.Wpf ：解决部分不能进行命令绑定的控件实现命令绑定功能。
 
 # UI界面
-# OfflineAI<img width="1269" alt="UI界面" src="https://github.com/user-attachments/assets/08b96450-c417-411c-83b0-30d2de64feb1" />
+<img width="586" alt="用户界面" src="https://github.com/user-attachments/assets/abfbdda0-35a7-4fb5-abf7-3f0324d8b87f" />
+
+# UI界面2
+
+<img width="1280" alt="用户界面2" src="https://github.com/user-attachments/assets/085f04ff-7f64-4174-8af6-2f8ab95dcdad" />
 
 # 功能
 > 1、实现AI聊天功能
